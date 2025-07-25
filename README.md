@@ -1,4 +1,4 @@
-# Assetto Corsa UDP | Library for use on ESP 32 / ESP8266 devices
+# Assetto Corsa UDP | Library for use on ESP32 / ESP8266 devices
 **Data Output from the Assetto Corsa**
 
 > Note: UDP telemetry differs between PC and Console versions of Assetto Corsa, therefore this library is tested and trialed on console editions of the game.
@@ -8,18 +8,17 @@ This program captures and parses packets that are sent by UDP from the Assetto C
 # Usage:
 ```c++
 #include "AC_UDP.h"
-AC_Parser acParser;
+AC_Parser parser;
 IPAddress playstationIP;
-char packetType;
 
 void setup()
 {
-    acParser.begin(playstationIP, packetType);
+    parser.begin(playstationIP);
 }
 
 void loop()
 {
-    packetContent = gt7Telem.read();
+   parser.read();
 }
 ```
 
@@ -33,7 +32,7 @@ The handshake is comprised of three components.
 
 Size: 12 bytes
 
-Frequency: Once to initialize a specific communication
+Frequency: Once to initialize/dismiss a specific communication
 
 ```c++
 struct handshake {
@@ -77,10 +76,11 @@ The handshake features base information such as the current track and car name.
 
 Size: 408 bytes
 
-Frequency: 60Hz (not available in Sport Mode)
+Frequency: 60Hz
 
 ```c++
-//...
+#define MAXLENGTH 50
+
 struct HandshakeResponse {
 uint16_t carName[MAXLENGTH]; // Name of the car (UTF-16LE)
 uint16_t driverName[MAXLENGTH]; // Username of the driver (UTF-16LE)
@@ -112,8 +112,8 @@ uint8_t isTcInAction; // TCS active flag
 uint8_t isTcEnabled; // TCS turned on flag
 uint8_t isInPit; // In pit flag
 uint8_t isEngineLimiterOn; // Engine rev limiter on flag
-uint8_t unknownByteA; // Unknown byte flag A
-uint8_t unknownByteB; // Unknown byte flag B
+uint8_t unknownByteA; // Unknown or unused byte flag A
+uint8_t unknownByteB; // Unknown or unused byte flag B
 float heave; // G force vertical
 float sway; // G force horizontally
 float surge; // G force front-back
@@ -157,12 +157,13 @@ Size: 212 Bytes
 Frequency: End of each lap
 
 ```c++
-//...
+#define MAXLENGTH 50
+
 struct RTLapInfo {
-    uint32_t carIdentifierNumber; // Identifier number of the car
-    uint32_t lapNumber; // Lap number of lap just finished
-    uint16_t driverName[MAXLENGTH]; // Driver name (UTF-16LE)
-    uint16_t carName[MAXLENGTH]; // Car name (UTF-16LE)
-    uint32_t lapTime; // Lap time of lap just finished
+uint32_t carIdentifierNumber; // Identifier number of the car
+uint32_t lapNumber; // Lap number of lap just finished
+uint16_t driverName[MAXLENGTH]; // Driver name (UTF-16LE)
+uint16_t carName[MAXLENGTH]; // Car name (UTF-16LE)
+uint32_t lapTime; // Lap time of lap just finished
 };
 ```

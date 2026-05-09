@@ -1,4 +1,4 @@
-//File: simpleserialprintcarinfo.ino
+//File: simpleserialprinthandshake.ino
 
 //#include "Wifi.h" // ESP32 WiFi include
 #include <ESP8266WiFi.h> // ESP8266 WiFi include
@@ -26,14 +26,13 @@ void setup()
   startWiFi();
   pinMode(LED_BUILTIN, OUTPUT);
   parser.begin(acServerIp);
-  parser.performHandshake(1);
 }
 
 void loop()
 {
   parser.read();
-  float speedKMH = parser.packetRTCarInfo()->rtCarInfo.speedKmh;
-  Serial.println(speedKMH);
+  uint32_t packetVersion = parser.packetHandshakeResponse()->handshakeResponse.version;
+  Serial.println(packetVersion);
 }
 
 void startWiFi()

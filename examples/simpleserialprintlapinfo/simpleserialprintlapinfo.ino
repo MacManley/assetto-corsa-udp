@@ -26,13 +26,14 @@ void setup()
   startWiFi();
   pinMode(LED_BUILTIN, OUTPUT);
   parser.begin(acServerIp);
+  parser.performHandshake(2);
 }
 
 void loop()
 {
   parser.read();
-  uint32_t packetVersion = parser.packetHandshakeResponse()->handshakeResponse.version;
-  Serial.println(packetVersion);
+  uint32_t lastLapTime = parser.packetRTLapInfo()->rtLapInfo.lapTime;
+  Serial.println(lastLapTime);
 }
 
 void startWiFi()

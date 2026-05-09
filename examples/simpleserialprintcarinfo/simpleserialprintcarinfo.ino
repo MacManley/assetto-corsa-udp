@@ -1,4 +1,4 @@
-//File: simpleserialprintlapinfo.ino
+//File: simpleserialprintcarinfo.ino
 
 //#include "Wifi.h" // ESP32 WiFi include
 #include <ESP8266WiFi.h> // ESP8266 WiFi include
@@ -26,14 +26,14 @@ void setup()
   startWiFi();
   pinMode(LED_BUILTIN, OUTPUT);
   parser.begin(acServerIp);
-  parser.performHandshake(2);
+  parser.performHandshake(1);
 }
 
 void loop()
 {
   parser.read();
-  uint32_t lastLapTime = parser.packetRTLapInfo()->rtLapInfo.lapTime;
-  Serial.println(lastLapTime);
+  float speedKMH = parser.packetRTCarInfo()->rtCarInfo.speedKmh;
+  Serial.println(speedKMH);
 }
 
 void startWiFi()

@@ -7,7 +7,7 @@
 
 const char *SSID = "Your SSID";
 const char *Password = "Your WiFi Password"; 
-const IPAddress acServerIp(..., ..., ., ...); // Enter your consoles IP Address here
+const IPAddress acServerIp(255, 255, 255, 255); // Enter your consoles IP Address here
 
 void startWiFi();
 
